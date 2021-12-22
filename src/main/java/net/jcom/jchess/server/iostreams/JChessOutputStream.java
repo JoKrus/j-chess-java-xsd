@@ -26,7 +26,7 @@ public class JChessOutputStream {
 
         try {
             SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = sf.newSchema(this.getClass().getResource("/xsd/jChessMessage.xsd"));
+            Schema schema = sf.newSchema(this.getClass().getResource("/xsd/j-chess-xsd/jChessMessage.xsd"));
             JAXBContext jaxbContext = JAXBContext.newInstance(JChessMessage.class);
             this.marshaller = jaxbContext.createMarshaller();
             this.marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);

@@ -30,7 +30,7 @@ public class JChessInputStream {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
             try {
-                URL urlToXsd = this.getClass().getResource("/xsd/jChessMessage.xsd");
+                URL urlToXsd = this.getClass().getResource("/xsd/j-chess-xsd/jChessMessage.xsd");
                 Schema schema = schemaFactory.newSchema(urlToXsd);
                 this.unmarshaller.setSchema(schema);
                 this.unmarshaller.setEventHandler((validationEvent) -> false);
