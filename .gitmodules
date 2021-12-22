@@ -1,4 +1,4 @@
-[submodule "./src/main/resources/xsd/j-chess-xsd"]
-	path = ./src/main/resources/xsd/j-chess-xsd
+[submodule "src/main/resources/xsd/j-chess-xsd"]
+	path = src/main/resources/xsd/j-chess-xsd
 	url = https://github.com/JoKrus/j-chess-xsd
     branch = master
