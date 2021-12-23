@@ -57,7 +57,14 @@ public class JChessOutputStream {
         }
     }
 
+    @Deprecated
     public String jChessToXML(JChessMessage jChessMessage) throws JAXBException {
+        return jChessToXml(jChessMessage);
+    }
+
+    public String jChessToXml(JChessMessage jChessMessage) throws JAXBException {
+        jChessMessage.setSchemaVersion(JChessInputStream.CURRENT_SCHEMA_VERSION);
+
         StringWriter stringWriter = new StringWriter();
         this.marshaller.marshal(jChessMessage, stringWriter);
         return stringWriter.toString();

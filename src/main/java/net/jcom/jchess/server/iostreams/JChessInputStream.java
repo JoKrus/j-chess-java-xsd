@@ -1,5 +1,6 @@
 package net.jcom.jchess.server.iostreams;
 
+import net.jcom.jchess.server.exception.InvalidSchemaVersion;
 import net.jcom.jchess.server.generated.JChessMessage;
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.SAXException;
@@ -18,6 +19,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class JChessInputStream {
+    public static final String CURRENT_SCHEMA_VERSION = new JChessMessage().getSchemaVersion();
+
     private final InputStream inputStream;
     private final Unmarshaller unmarshaller;
 
@@ -55,7 +58,7 @@ public class JChessInputStream {
         return (new BigInteger(textLength)).intValue();
     }
 
-    public JChessMessage readJChess() throws IOException {
+    public JChessMessage readJChess() throws IOException, InvalidSchemaVersion {
         JChessMessage result;
         try {
             String xml = this.readMessage();
@@ -67,9 +70,18 @@ public class JChessInputStream {
         return result;
     }
 
-    public JChessMessage XMLToJChess(String xml) throws JAXBException {
+    @Deprecated
+    public JChessMessage XMLToJChess(String xml) throws JAXBException, InvalidSchemaVersion {
+        return xmlToJChess(xml);
+    }
+
+    public JChessMessage xmlToJChess(String xml) throws JAXBException, InvalidSchemaVersion {
         StringReader stringReader = new StringReader(xml);
-        return (JChessMessage) this.unmarshaller.unmarshal(stringReader);
+        JChessMessage unmarshal = (JChessMessage) this.unmarshaller.unmarshal(stringReader);
+        if (!CURRENT_SCHEMA_VERSION.equals(unmarshal.getSchemaVersion())) {
+            throw new InvalidSchemaVersion(CURRENT_SCHEMA_VERSION, unmarshal.getSchemaVersion());
+        }
+        return unmarshal;
     }
 
     public void close() throws IOException {
