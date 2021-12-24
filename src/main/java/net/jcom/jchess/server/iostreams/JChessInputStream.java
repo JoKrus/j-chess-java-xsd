@@ -77,6 +77,7 @@ public class JChessInputStream {
 
     public JChessMessage xmlToJChess(String xml) throws JAXBException, InvalidSchemaVersion {
         StringReader stringReader = new StringReader(xml);
+        //FIXME! A Unmarshall exception is already thrown here, either implement validation listener or check otherwise
         JChessMessage unmarshal = (JChessMessage) this.unmarshaller.unmarshal(stringReader);
         if (!CURRENT_SCHEMA_VERSION.equals(unmarshal.getSchemaVersion())) {
             throw new InvalidSchemaVersion(CURRENT_SCHEMA_VERSION, unmarshal.getSchemaVersion());
