@@ -36,7 +36,8 @@ public class JChessInputStream {
                 URL urlToXsd = this.getClass().getResource("/xsd/j-chess-xsd/jChessMessage.xsd");
                 Schema schema = schemaFactory.newSchema(urlToXsd);
                 this.unmarshaller.setSchema(schema);
-                this.unmarshaller.setEventHandler((validationEvent) -> false);
+                //if error is in schemaVersion, handle the fault manually
+                this.unmarshaller.setEventHandler((validationEvent) -> validationEvent.getMessage().contains("schemaVersion"));
             } catch (SAXException var6) {
                 throw new RuntimeException(var6);
             }
@@ -77,7 +78,6 @@ public class JChessInputStream {
 
     public JChessMessage xmlToJChess(String xml) throws JAXBException, InvalidSchemaVersion {
         StringReader stringReader = new StringReader(xml);
-        //FIXME! A Unmarshall exception is already thrown here, either implement validation listener or check otherwise
         JChessMessage unmarshal = (JChessMessage) this.unmarshaller.unmarshal(stringReader);
         if (!CURRENT_SCHEMA_VERSION.equals(unmarshal.getSchemaVersion())) {
             throw new InvalidSchemaVersion(CURRENT_SCHEMA_VERSION, unmarshal.getSchemaVersion());
