@@ -20,9 +20,16 @@ public class JChessMessageFactory {
     }
 
     public static JChessMessage createLoginMessage(UUID playerId, String teamName) {
+        return createLoginMessage(playerId, teamName, null);
+    }
+
+    public static JChessMessage createLoginMessage(UUID playerId, String teamName, String tournamentCode) {
         JChessMessage msg = createBaseMessage(playerId, JChessMessageType.LOGIN);
         LoginMessage logMsg = new LoginMessage();
         logMsg.setName(teamName);
+        if (tournamentCode != null && !tournamentCode.isEmpty()) {
+            logMsg.setTournamentCode(tournamentCode);
+        }
         msg.setLogin(logMsg);
         return msg;
     }
